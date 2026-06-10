@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* Theme tokens — registered so `bg-primary`, `text-secondary`, etc. work.
+   Values are overridden at runtime from site_settings (multi-tenant),
+   see settingsStore.applyTheme(). */
+@theme {
+  --color-primary: #f97316;
+  --color-secondary: #f43f5e;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-marathi: 'Mukta', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --color-primary: #f97316;
+  --color-secondary: #f43f5e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #1f2937;
+  background: #0d0a14;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom Modern Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0a14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b; /* slate-800 equivalent */
+  border-radius: 9999px;
+  border: 2px solid #0d0a14;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155; /* slate-700 equivalent */
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
