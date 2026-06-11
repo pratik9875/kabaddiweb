@@ -246,7 +246,7 @@ export function AdminExpensesPage() {
               {editing ? 'Edit Expense' : 'Add Expense'}
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Year</label>
                   <select
@@ -280,7 +280,7 @@ export function AdminExpensesPage() {
                 {...register('description')}
               />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="Amount (₹)"
                   type="number"

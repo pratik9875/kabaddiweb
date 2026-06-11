@@ -177,7 +177,7 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
 
           <Input label="Name" error={errors.name?.message} {...register('name')} />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Jersey #"
               type="number"
@@ -205,7 +205,7 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Weight (kg)"
               type="number"
@@ -221,7 +221,7 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Phone"
               error={errors.phone?.message}

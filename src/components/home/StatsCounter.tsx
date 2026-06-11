@@ -88,7 +88,7 @@ export function StatsCounter() {
   return (
     <section className="py-20 relative z-10 -mt-10">
       <Container>
-        <div ref={ref} className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
+        <div ref={ref} className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
           {stats.map((s) => (
             <StatCard key={s.label} stat={s} run={run} />
           ))}

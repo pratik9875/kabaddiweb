@@ -40,7 +40,7 @@ export function Navbar() {
               <Shield size={24} />
             </span>
           )}
-          <span className="text-2xl font-marathi">{settings.team_name}</span>
+          <span className="text-lg sm:text-xl lg:text-2xl font-marathi truncate max-w-[180px] sm:max-w-none">{settings.team_name}</span>
         </Link>
 
         {/* Desktop nav */}

@@ -98,7 +98,7 @@ export function ImageCropModal({ open, imageSrc, aspect = 1, onComplete, onClose
           </button>
         </div>
 
-        <div className="relative h-80 w-full bg-gray-900">
+        <div className="relative h-64 sm:h-80 w-full bg-gray-900">
           <Cropper
             image={imageSrc}
             crop={crop}

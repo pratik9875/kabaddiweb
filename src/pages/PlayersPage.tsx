@@ -205,7 +205,7 @@ export function PlayersPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 {selectedPlayer.date_of_birth && (
                   <div className="flex items-center gap-2 text-gray-600">
                     <Calendar size={14} className="text-gray-400" />
