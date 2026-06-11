@@ -16,7 +16,7 @@ import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
 import { Spinner } from '../../components/ui/Spinner'
 import { ImageCropModal } from '../../components/ui/ImageCropModal'
-import { cn, formatDateIN, uploadImage } from '../../lib/utils'
+import { cn, formatDateIN, normalizeImageFile, uploadImage } from '../../lib/utils'
 import {
   Search,
   Plus,
@@ -93,10 +93,11 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
     },
   })
 
-  const handlePhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    setCropSrc(URL.createObjectURL(file))
+    const normalized = await normalizeImageFile(file)
+    setCropSrc(URL.createObjectURL(normalized))
   }
 
   const handleCropComplete = async (cropped: File) => {
@@ -156,7 +157,7 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
               <input
                 ref={fileRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/*"
                 className="hidden"
                 onChange={handlePhotoChange}
               />

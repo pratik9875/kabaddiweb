@@ -14,7 +14,7 @@ import type { Gallery } from '../../types'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { ImageCropModal } from '../../components/ui/ImageCropModal'
-import { cn, uploadImage } from '../../lib/utils'
+import { cn, normalizeImageFile, uploadImage } from '../../lib/utils'
 
 const CATEGORIES = ['Match', 'Practice', 'Event', 'Award'] as const
 
@@ -263,16 +263,19 @@ export function AdminGalleryPage() {
                     <input
                       ref={fileRef}
                       type="file"
-                      accept="image/jpeg,image/png,image/webp"
+                      accept="image/*"
                       multiple
                       className="hidden"
-                      onChange={(e) => {
-                        const files = Array.from(e.target.files ?? [])
-                        setSelectedFiles(files)
+                      onChange={async (e) => {
+                        const rawFiles = Array.from(e.target.files ?? [])
+                        const normalized = await Promise.all(
+                          rawFiles.map((f) => normalizeImageFile(f))
+                        )
+                        setSelectedFiles(normalized)
                         setPendingFiles([])
                         setCropIndex(0)
-                        if (files.length > 0) {
-                          setCropSrc(URL.createObjectURL(files[0]))
+                        if (normalized.length > 0) {
+                          setCropSrc(URL.createObjectURL(normalized[0]))
                         }
                       }}
                     />

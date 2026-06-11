@@ -26,38 +26,51 @@ export function formatDateIN(date: string | Date | null | undefined): string {
   return `${dd}/${mm}/${d.getFullYear()}`
 }
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024 // 5MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024 // 10MB
 
 export interface ImageValidationResult {
   ok: boolean
   error?: string
 }
 
-/** Validate an image file: type (jpg/png/webp) and size (<=5MB). */
+/** Convert HEIC/HEIF files to JPEG, leave other files untouched. */
+export async function normalizeImageFile(file: File): Promise<File> {
+  if (file.type !== 'image/heic' && file.type !== 'image/heif') return file
+
+  const { default: heic2any } = await import('heic2any')
+  const blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 })
+  const jpegBlob = Array.isArray(blob) ? blob[0] : blob
+  const newName = file.name.replace(/\.(heic|heif)$/i, '.jpg')
+  return new File([jpegBlob], newName, { type: 'image/jpeg' })
+}
+
+/** Validate an image file: type (jpg/png/webp/heic/heif) and size (<=10MB). */
 export function validateImage(file: File): ImageValidationResult {
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
     return { ok: false, error: 'Only JPG, PNG, or WEBP images are allowed.' }
   }
   if (file.size > MAX_IMAGE_BYTES) {
-    return { ok: false, error: 'Image must be 5MB or smaller.' }
+    return { ok: false, error: 'Image must be 10MB or smaller.' }
   }
   return { ok: true }
 }
 
 /**
  * Upload a validated image to Supabase Storage and return its public URL.
+ * Automatically converts HEIC/HEIF to JPEG before uploading.
  * Throws on validation failure or upload error.
  * @param folder subfolder within the bucket, e.g. "players"
  */
 export async function uploadImage(file: File, folder: string): Promise<string> {
-  const check = validateImage(file)
+  const normalized = await normalizeImageFile(file)
+  const check = validateImage(normalized)
   if (!check.ok) throw new Error(check.error)
 
-  const path = `${folder}/${crypto.randomUUID()}-${file.name}`
+  const path = `${folder}/${crypto.randomUUID()}-${normalized.name}`
   const { error } = await supabase.storage
     .from(MEDIA_BUCKET)
-    .upload(path, file, { cacheControl: '3600', upsert: false })
+    .upload(path, normalized, { cacheControl: '3600', upsert: false })
   if (error) throw error
 
   const { data } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path)

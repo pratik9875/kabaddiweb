@@ -7,7 +7,7 @@ import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
 import { Spinner } from '../../components/ui/Spinner'
 import { ImageCropModal } from '../../components/ui/ImageCropModal'
-import { cn, uploadImage } from '../../lib/utils'
+import { cn, normalizeImageFile, uploadImage } from '../../lib/utils'
 import { AlertCircle, CheckCircle2, Camera, Save } from 'lucide-react'
 
 const settingsSchema = z.object({
@@ -52,10 +52,11 @@ function ImageUpload({ label, currentUrl, uploading, aspect = 1, onFileChange }:
   const fileRef = useRef<HTMLInputElement>(null)
   const [cropSrc, setCropSrc] = useState<string | null>(null)
 
-  const handleSelect = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSelect = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    setCropSrc(URL.createObjectURL(file))
+    const normalized = await normalizeImageFile(file)
+    setCropSrc(URL.createObjectURL(normalized))
   }
 
   const handleCropComplete = (cropped: File) => {
@@ -78,7 +79,7 @@ function ImageUpload({ label, currentUrl, uploading, aspect = 1, onFileChange }:
           <input
             ref={fileRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*"
             className="hidden"
             onChange={handleSelect}
           />

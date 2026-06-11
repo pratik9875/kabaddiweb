@@ -303,7 +303,7 @@ export function AdminExpensesPage() {
                   {receiptFile ? receiptFile.name : (editing?.receipt_url ? 'Replace receipt' : 'Upload receipt')}
                   <input
                     type="file"
-                    accept="image/jpeg,image/png,image/webp"
+                    accept="image/*"
                     className="sr-only"
                     onChange={(e) => setReceiptFile(e.target.files?.[0] ?? null)}
                   />

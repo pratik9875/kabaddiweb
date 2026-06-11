@@ -6,6 +6,7 @@ import { Card } from '../ui/Card'
 import { ImageCropModal } from '../ui/ImageCropModal'
 import { Loader2, Upload, X, User } from 'lucide-react'
 import { supabase, MEDIA_BUCKET, ORG_SLUG } from '../../lib/supabase'
+import { normalizeImageFile } from '../../lib/utils'
 import { Spinner } from '../ui/Spinner'
 import type { Player } from '../../types'
 
@@ -61,10 +62,11 @@ export function EditPlayerForm() {
     }
   }, [player, initialised])
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    setCropSrc(URL.createObjectURL(file))
+    const normalized = await normalizeImageFile(file)
+    setCropSrc(URL.createObjectURL(normalized))
   }
 
   const handleCropComplete = (cropped: File) => {

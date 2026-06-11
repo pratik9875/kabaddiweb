@@ -9,7 +9,7 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Spinner } from '../../components/ui/Spinner'
 import { ImageCropModal } from '../../components/ui/ImageCropModal'
-import { cn, formatINR, uploadImage } from '../../lib/utils'
+import { cn, formatINR, normalizeImageFile, uploadImage } from '../../lib/utils'
 
 const donorSchema = z.object({
   donor_name: z.string().min(1, 'Donor name is required'),
@@ -89,10 +89,11 @@ export function AdminDonorsPage() {
     setPhotoPreview(null)
   }
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    setCropSrc(URL.createObjectURL(file))
+    const normalized = await normalizeImageFile(file)
+    setCropSrc(URL.createObjectURL(normalized))
   }
 
   function handleCropComplete(cropped: File) {
@@ -345,7 +346,7 @@ export function AdminDonorsPage() {
                   <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50">
                     <Upload size={16} />
                     {photoFile ? photoFile.name : 'Upload photo'}
-                    <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handlePhotoChange} />
+                    <input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
                   </label>
                 </div>
               </div>

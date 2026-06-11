@@ -305,7 +305,7 @@ export function AdminAchievementsPage() {
                   <input
                     ref={fileRef}
                     type="file"
-                    accept="image/jpeg,image/png,image/webp"
+                    accept="image/*"
                     className="hidden"
                     onChange={(e) => setTrophyFile(e.target.files?.[0] ?? null)}
                   />

@@ -59,23 +59,31 @@ export function ImageCropModal({ open, imageSrc, aspect = 1, onComplete, onClose
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
   const [processing, setProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
     setCroppedAreaPixels(croppedPixels)
+    setError(null)
   }, [])
 
   const handleCrop = async () => {
     if (!croppedAreaPixels) return
     setProcessing(true)
+    setError(null)
     try {
       const blob = await getCroppedImg(imageSrc, croppedAreaPixels)
       const file = new File([blob], 'cropped.jpg', { type: 'image/jpeg' })
       onComplete(file)
     } catch {
-      // crop failed — do nothing
+      setError('Failed to process image. Try a different photo or format.')
     } finally {
       setProcessing(false)
     }
+  }
+
+  const handleClose = () => {
+    setError(null)
+    onClose()
   }
 
   if (!open) return null
@@ -85,7 +93,7 @@ export function ImageCropModal({ open, imageSrc, aspect = 1, onComplete, onClose
       <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl mx-4">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <h2 className="text-lg font-semibold text-gray-900">Crop Image</h2>
-          <button onClick={onClose} className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+          <button onClick={handleClose} className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600">
             <X size={20} />
           </button>
         </div>
@@ -115,8 +123,14 @@ export function ImageCropModal({ open, imageSrc, aspect = 1, onComplete, onClose
           />
         </div>
 
+        {error && (
+          <div className="px-6 py-2">
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
+
         <div className="flex justify-end gap-3 border-t border-gray-100 px-6 py-4">
-          <Button type="button" variant="outline" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={handleClose}>
             Cancel
           </Button>
           <Button type="button" onClick={handleCrop} disabled={processing}>

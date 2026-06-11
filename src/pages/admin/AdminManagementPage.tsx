@@ -16,7 +16,7 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Spinner } from '../../components/ui/Spinner'
 import { ImageCropModal } from '../../components/ui/ImageCropModal'
-import { cn, uploadImage } from '../../lib/utils'
+import { cn, normalizeImageFile, uploadImage } from '../../lib/utils'
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -77,10 +77,11 @@ function ManagementFormModal({ open, editingMember, onClose }: ManagementFormMod
     }
   }
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setCropSrc(URL.createObjectURL(file))
+      const normalized = await normalizeImageFile(file)
+      setCropSrc(URL.createObjectURL(normalized))
     }
   }
 
@@ -226,7 +227,7 @@ function ManagementFormModal({ open, editingMember, onClose }: ManagementFormMod
               <span>{photoFile ? photoFile.name : 'Upload photo'}</span>
               <input
                 type="file"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/*"
                 className="sr-only"
                 onChange={handlePhotoChange}
               />
