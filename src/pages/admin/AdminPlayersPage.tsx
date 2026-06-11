@@ -73,6 +73,7 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
   const fileRef = useRef<HTMLInputElement>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(player?.photo_url ?? null)
   const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
   const [cropSrc, setCropSrc] = useState<string | null>(null)
 
   const {
@@ -105,12 +106,14 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
   const handleCropComplete = async (cropped: File) => {
     setPhotoPreview(URL.createObjectURL(cropped))
     setUploading(true)
+    setUploadError(null)
     try {
       const url = await uploadImage(cropped, 'players')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setValue('photo_url' as any, url)
-    } catch {
+    } catch (e) {
       setPhotoPreview(player?.photo_url ?? null)
+      setUploadError(e instanceof Error ? e.message : 'Photo upload failed')
     } finally {
       setUploading(false)
       setCropSrc(null)
@@ -167,6 +170,9 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
                 {uploading ? 'Uploading...' : 'Photo'}
               </span>
             </label>
+            {uploadError && (
+              <p className="mt-2 text-center text-xs text-red-600">{uploadError}</p>
+            )}
           </div>
 
           <Input label="Name" error={errors.name?.message} {...register('name')} />
