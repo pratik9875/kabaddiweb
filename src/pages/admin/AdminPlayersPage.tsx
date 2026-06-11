@@ -39,6 +39,7 @@ const playerSchema = z.object({
   date_of_birth: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
   joined_year: z.coerce.number().int().min(1900).nullable().optional(),
+  photo_url: z.string().nullable().optional(),
 })
 
 type PlayerFormValues = z.infer<typeof playerSchema>
@@ -90,6 +91,7 @@ function PlayerFormModal({ player, onClose }: PlayerFormModalProps) {
       date_of_birth: player?.date_of_birth ? player.date_of_birth.slice(0, 10) : '',
       phone: player?.phone ?? '',
       joined_year: player?.joined_year ?? null,
+      photo_url: player?.photo_url ?? null,
     },
   })
 
