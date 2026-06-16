@@ -84,9 +84,6 @@ export function AdminDashboardPage() {
         </div>
       </div>
 
-      <p className="text-sm text-gray-400">
-        Content management pages are added in the next phase.
-      </p>
     </div>
   )
 }

@@ -18,4 +18,4 @@ export const supabase = createClient<Database>(
 
 export const ORG_SLUG = import.meta.env.VITE_ORG_SLUG ?? 'village-kabaddi-team'
 
-export const MEDIA_BUCKET = 'kabaddi_media'
+export const MEDIA_BUCKET = 'kabaddi-media'

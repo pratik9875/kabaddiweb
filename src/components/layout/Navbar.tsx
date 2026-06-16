@@ -8,6 +8,7 @@ import { cn } from '../../lib/utils'
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/players', label: 'Players' },
+  { to: '/retired-players', label: 'Retired' },
   { to: '/management', label: 'Management' },
   { to: '/achievements', label: 'Achievements' },
   { to: '/finances', label: 'Finances' },

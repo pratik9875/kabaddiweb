@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { IndianRupee, FileText, Plus, Pencil, Trash2, Upload } from 'lucide-react'
+import { IndianRupee, FileText, Plus, Pencil, Trash2, Upload, AlertCircle } from 'lucide-react'
 import { useExpenses, useCreateExpense, useUpdateExpense, useDeleteExpense } from '../../hooks/useExpenses'
 import type { Expense } from '../../types'
 import { formatDateIN, formatINR, uploadImage } from '../../lib/utils'
@@ -39,6 +39,8 @@ export function AdminExpensesPage() {
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [receiptFile, setReceiptFile] = useState<File | null>(null)
+  const [removeReceipt, setRemoveReceipt] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const { data: expenses, isLoading, isError, error } = useExpenses(year)
   const { mutateAsync: createExpense } = useCreateExpense()
@@ -64,6 +66,8 @@ export function AdminExpensesPage() {
   const openCreate = () => {
     setEditing(null)
     setReceiptFile(null)
+    setRemoveReceipt(false)
+    setSubmitError(null)
     reset({ year: currentYear, category: 'Other', description: '', amount: 0, expense_date: '' })
     setModalOpen(true)
   }
@@ -71,6 +75,8 @@ export function AdminExpensesPage() {
   const openEdit = (expense: Expense) => {
     setEditing(expense)
     setReceiptFile(null)
+    setRemoveReceipt(false)
+    setSubmitError(null)
     reset({
       year: expense.year,
       category: expense.category as ExpenseForm['category'],
@@ -82,12 +88,17 @@ export function AdminExpensesPage() {
   }
 
   const onSubmit = async (values: ExpenseForm) => {
+    setSubmitError(null)
     setUploading(true)
     try {
       let receipt_url: string | null = null
       if (receiptFile) {
-        receipt_url = await uploadImage(receiptFile, 'receipts')
-      } else if (editing?.receipt_url) {
+        try {
+          receipt_url = await uploadImage(receiptFile, 'receipts')
+        } catch {
+          receipt_url = null
+        }
+      } else if (editing?.receipt_url && !removeReceipt) {
         receipt_url = editing.receipt_url
       }
 
@@ -97,8 +108,9 @@ export function AdminExpensesPage() {
         await createExpense({ ...values, receipt_url })
       }
       setModalOpen(false)
-    } catch {
-      // Silently fail; mutation errors are handled by React Query
+    } catch (err) {
+      const msg = (err as { message?: string })?.message ?? (err as { error?: string })?.error ?? String(err)
+      setSubmitError(msg)
     } finally {
       setUploading(false)
     }
@@ -246,6 +258,12 @@ export function AdminExpensesPage() {
               {editing ? 'Edit Expense' : 'Add Expense'}
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+              {submitError && (
+                <div className="flex items-start gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                  <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                  <span>{submitError}</span>
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Year</label>
@@ -298,16 +316,33 @@ export function AdminExpensesPage() {
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700">Receipt (optional)</label>
-                <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3.5 py-2.5 text-sm text-gray-500 transition-colors hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]">
+                <div className="flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3.5 py-2.5 text-sm text-gray-500 transition-colors hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]">
                   <Upload size={16} />
-                  {receiptFile ? receiptFile.name : (editing?.receipt_url ? 'Replace receipt' : 'Upload receipt')}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="sr-only"
-                    onChange={(e) => setReceiptFile(e.target.files?.[0] ?? null)}
-                  />
-                </label>
+                  <label className="cursor-pointer flex-1">
+                    {receiptFile ? receiptFile.name : (editing?.receipt_url ? 'Replace receipt' : 'Upload receipt')}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => {
+                        setReceiptFile(e.target.files?.[0] ?? null)
+                        setRemoveReceipt(false)
+                      }}
+                    />
+                  </label>
+                </div>
+                {editing?.receipt_url && !receiptFile && !removeReceipt && (
+                  <button
+                    type="button"
+                    onClick={() => setRemoveReceipt(true)}
+                    className="mt-1.5 text-xs text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    Remove existing receipt
+                  </button>
+                )}
+                {removeReceipt && (
+                  <p className="mt-1 text-xs text-amber-600">Existing receipt will be removed on save.</p>
+                )}
               </div>
 
               <div className="mt-2 flex gap-3">

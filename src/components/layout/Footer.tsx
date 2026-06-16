@@ -22,8 +22,10 @@ export function Footer() {
           <h4 className="mb-3 text-sm font-bold text-slate-800">Explore</h4>
           <ul className="space-y-2 text-sm font-medium">
             <li><Link to="/players" className="hover:text-[var(--color-primary)] transition-colors">Players</Link></li>
+            <li><Link to="/retired-players" className="hover:text-[var(--color-primary)] transition-colors">Retired Players</Link></li>
             <li><Link to="/achievements" className="hover:text-[var(--color-primary)] transition-colors">Achievements</Link></li>
             <li><Link to="/donors" className="hover:text-[var(--color-primary)] transition-colors">Donors</Link></li>
+            <li><Link to="/gallery" className="hover:text-[var(--color-primary)] transition-colors">Gallery</Link></li>
             <li><Link to="/contact" className="hover:text-[var(--color-primary)] transition-colors">Contact</Link></li>
           </ul>
         </div>

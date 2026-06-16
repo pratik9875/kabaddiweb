@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { usePlayers, useDeletePlayer } from '../hooks/usePlayers'
 import { Spinner } from '../components/ui/Spinner'
 import { useAuthStore } from '../store/authStore'
+import { useSettingsStore } from '../store/settingsStore'
 import { UserCircle2, Pencil, Trash2, X, Phone, Calendar, Weight, Hash, Medal } from 'lucide-react'
 import { formatDateIN } from '../lib/utils'
 import type { Player } from '../types'
@@ -10,6 +11,7 @@ import type { Player } from '../types'
 export function PlayersPage() {
   const { data: players, isLoading, isError, error } = usePlayers()
   const isAdmin = useAuthStore((s) => s.isAdmin)
+  const settings = useSettingsStore((s) => s.settings)
   const { mutate: deletePlayer } = useDeletePlayer()
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
@@ -42,7 +44,7 @@ export function PlayersPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Our Players</h1>
-          <p className="mt-1 text-sm text-gray-500">Meet the squad of Shree Krishna Krida Mandal</p>
+          <p className="mt-1 text-sm text-gray-500">Meet the squad of {settings.team_name}</p>
         </div>
         {isAdmin && (
           <Link

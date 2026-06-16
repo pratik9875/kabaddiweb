@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Users, Trophy, CalendarDays, HandCoins } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useSettingsStore } from '../../store/settingsStore'
+import { countRows } from '../../hooks/crud'
 import { Container } from '../ui/Container'
 
 interface Stat {
@@ -57,6 +59,18 @@ export function StatsCounter() {
   const ref = useRef<HTMLDivElement>(null)
   const [run, setRun] = useState(false)
 
+  const { data: counts } = useQuery({
+    queryKey: ['homepage_stats'],
+    queryFn: async () => {
+      const [players, achievements, donors] = await Promise.all([
+        countRows('players', { is_retired: false }),
+        countRows('achievements'),
+        countRows('prize_donors'),
+      ])
+      return { players, achievements, donors }
+    },
+  })
+
   useEffect(() => {
     const el = ref.current
     if (!el) return
@@ -77,12 +91,11 @@ export function StatsCounter() {
     ? new Date().getFullYear() - settings.founded_year
     : 0
 
-  // Placeholder figures — wired to live DB counts in a later phase.
   const stats: Stat[] = [
-    { icon: Users, label: 'Players', value: 24 },
-    { icon: Trophy, label: 'Tournaments Won', value: 12 },
+    { icon: Users, label: 'Players', value: counts?.players ?? 0 },
+    { icon: Trophy, label: 'Tournaments Won', value: counts?.achievements ?? 0 },
     { icon: CalendarDays, label: 'Years Active', value: yearsActive },
-    { icon: HandCoins, label: 'Prize Donors', value: 18 },
+    { icon: HandCoins, label: 'Prize Donors', value: counts?.donors ?? 0 },
   ]
 
   return (
