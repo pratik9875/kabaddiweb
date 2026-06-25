@@ -1,4 +1,4 @@
--- =====================================================================
+``-- =====================================================================
 -- Village Kabaddi Team Website — Initial Schema (multi-tenant)
 -- Run in Supabase SQL Editor. Safe to re-run (drops via IF EXISTS guards
 -- are NOT included; run once on a fresh project).
