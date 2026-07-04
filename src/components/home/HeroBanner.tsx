@@ -47,8 +47,8 @@ export function HeroBanner() {
             <Trophy size={14} className="text-[var(--color-secondary)]" /> {settings.tagline ?? 'Pride of the Village'}
           </span>
 
-          <h1 className="max-w-xl text-3xl font-black leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-            <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+          <h1 className="max-w-xl text-3xl font-black leading-[1.3] tracking-tight sm:text-5xl lg:text-6xl">
+            <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text pb-1 text-transparent">
               <span className="font-marathi">{settings.hero_title ?? settings.team_name}</span>
             </span>
           </h1>

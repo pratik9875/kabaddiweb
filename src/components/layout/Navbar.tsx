@@ -30,22 +30,22 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100/60 py-2">
       <Container className="flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 font-bold text-gray-900">
+        <Link to="/" className="flex shrink-0 items-center gap-3 font-bold text-gray-900">
           {settings.logo_url ? (
-            <img src={settings.logo_url} alt="" className="h-12 w-12 rounded-full object-cover" />
+            <img src={settings.logo_url} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" />
           ) : (
             <span
-              className="grid h-12 w-12 place-items-center rounded-full text-white"
+              className="grid h-16 w-16 shrink-0 place-items-center rounded-full text-white"
               style={{ background: 'var(--color-primary)' }}
             >
-              <Shield size={24} />
+              <Shield size={28} />
             </span>
           )}
-          <span className="text-lg sm:text-xl lg:text-2xl font-marathi truncate max-w-[180px] sm:max-w-none">{settings.team_name}</span>
+          <span className="whitespace-nowrap text-base font-marathi sm:text-lg xl:text-xl">{settings.team_name}</span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-5 xl:flex">
           {NAV_LINKS.map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === '/'}>
               {l.label}
@@ -62,7 +62,7 @@ export function Navbar() {
         {/* Mobile toggle */}
         <button
           type="button"
-          className="lg:hidden text-gray-700"
+          className="xl:hidden text-gray-700"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
         >
@@ -72,7 +72,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <nav className="border-t border-gray-100 bg-white lg:hidden">
+        <nav className="border-t border-gray-100 bg-white xl:hidden">
           <Container className="flex flex-col gap-1 py-3">
             {NAV_LINKS.map((l) => (
               <NavLink

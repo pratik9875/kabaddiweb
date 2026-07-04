@@ -1,7 +1,6 @@
 import { useSettingsStore } from '../store/settingsStore'
 import { Container } from '../components/ui/Container'
 import { HeroBanner } from '../components/home/HeroBanner'
-import { ValuesStrip } from '../components/home/ValuesStrip'
 import { StatsCounter } from '../components/home/StatsCounter'
 import { HighlightsSection } from '../components/home/HighlightsSection'
 
@@ -11,7 +10,6 @@ export function HomePage() {
   return (
     <>
       <HeroBanner />
-      <ValuesStrip />
       <StatsCounter />
       <HighlightsSection />
 
