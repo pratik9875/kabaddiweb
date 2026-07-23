@@ -29,19 +29,22 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100/60 py-2">
-      <Container className="flex h-16 items-center justify-between">
-        <Link to="/" className="flex shrink-0 items-center gap-3 font-bold text-gray-900">
+      <Container className="flex min-h-16 items-center justify-between gap-3 py-1">
+        <Link to="/" className="flex min-w-0 flex-1 items-center gap-2 font-bold text-gray-900 sm:flex-none sm:gap-3">
           {settings.logo_url ? (
-            <img src={settings.logo_url} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" />
+            <img src={settings.logo_url} alt="" className="h-11 w-11 shrink-0 rounded-full object-cover sm:h-16 sm:w-16" />
           ) : (
             <span
-              className="grid h-16 w-16 shrink-0 place-items-center rounded-full text-white"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-white sm:h-16 sm:w-16"
               style={{ background: 'var(--color-primary)' }}
             >
-              <Shield size={28} />
+              <Shield size={24} className="sm:hidden" />
+              <Shield size={28} className="hidden sm:block" />
             </span>
           )}
-          <span className="whitespace-nowrap text-base font-marathi sm:text-lg xl:text-xl">{settings.team_name}</span>
+          <span className="min-w-0 flex-1 font-marathi text-sm leading-tight text-gray-900 sm:flex-none sm:whitespace-nowrap sm:text-lg xl:text-xl">
+            {settings.team_name}
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -62,7 +65,7 @@ export function Navbar() {
         {/* Mobile toggle */}
         <button
           type="button"
-          className="xl:hidden text-gray-700"
+          className="shrink-0 xl:hidden text-gray-700"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
         >

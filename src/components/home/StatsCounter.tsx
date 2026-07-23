@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react'
 import { useSettingsStore } from '../../store/settingsStore'
 import { countRows } from '../../hooks/crud'
 import { Container } from '../ui/Container'
+import { Reveal } from '../ui/Reveal'
 
 interface Stat {
   icon: LucideIcon
@@ -102,8 +103,10 @@ export function StatsCounter() {
     <section className="py-20 relative z-10">
       <Container>
         <div ref={ref} className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
-          {stats.map((s) => (
-            <StatCard key={s.label} stat={s} run={run} />
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 100}>
+              <StatCard stat={s} run={run} />
+            </Reveal>
           ))}
         </div>
       </Container>
