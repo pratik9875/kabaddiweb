@@ -23,7 +23,9 @@ const expenseSchema = z.object({
   year: z.coerce.number().int().min(2000).max(2100),
   category: z.enum(EXPENSE_CATEGORIES),
   description: z.string().min(1, 'Description is required'),
-  amount: z.coerce.number().positive('Amount must be positive'),
+  amount: z.coerce
+    .number({ invalid_type_error: 'Amount is required' })
+    .positive('Amount must be greater than 0'),
   expense_date: z.string().min(1, 'Date is required'),
 })
 
@@ -60,7 +62,7 @@ export function AdminExpensesPage() {
   } = useForm<ExpenseForm>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(expenseSchema) as any,
-    defaultValues: { year: currentYear, category: 'Other' },
+    defaultValues: { year: currentYear, category: 'Other', description: '', expense_date: '' },
   })
 
   const openCreate = () => {
@@ -68,7 +70,7 @@ export function AdminExpensesPage() {
     setReceiptFile(null)
     setRemoveReceipt(false)
     setSubmitError(null)
-    reset({ year: currentYear, category: 'Other', description: '', amount: 0, expense_date: '' })
+    reset({ year: currentYear, category: 'Other', description: '', amount: undefined, expense_date: '' })
     setModalOpen(true)
   }
 
@@ -89,13 +91,15 @@ export function AdminExpensesPage() {
 
   const onSubmit = async (values: ExpenseForm) => {
     setSubmitError(null)
-    setUploading(true)
     try {
+      setUploading(true)
       let receipt_url: string | null = null
       if (receiptFile) {
         try {
           receipt_url = await uploadImage(receiptFile, 'receipts')
-        } catch {
+        } catch (uploadErr) {
+          // Receipt upload failed — proceed without receipt, don't block save
+          console.warn('Receipt upload failed:', uploadErr)
           receipt_url = null
         }
       } else if (editing?.receipt_url && !removeReceipt) {
@@ -108,8 +112,12 @@ export function AdminExpensesPage() {
         await createExpense({ ...values, receipt_url })
       }
       setModalOpen(false)
+      reset()
     } catch (err) {
-      const msg = (err as { message?: string })?.message ?? (err as { error?: string })?.error ?? String(err)
+      const msg =
+        (err as { message?: string })?.message ??
+        (err as { error?: string })?.error ??
+        String(err)
       setSubmitError(msg)
     } finally {
       setUploading(false)
@@ -302,7 +310,9 @@ export function AdminExpensesPage() {
                 <Input
                   label="Amount (₹)"
                   type="number"
-                  placeholder="0"
+                  placeholder="e.g. 500"
+                  min="0.01"
+                  step="0.01"
                   error={errors.amount?.message}
                   {...register('amount')}
                 />
