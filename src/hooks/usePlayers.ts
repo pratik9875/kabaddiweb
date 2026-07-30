@@ -22,7 +22,7 @@ export function usePlayers(includeRetired = false) {
         // sort_order column may not exist yet — retry without ordering
         if (String(error.message ?? '').includes('sort_order')) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          let fallback: any = supabase
+          const fallback: any = supabase
             .from('players' as never)
             .select('*')
             .eq('org_slug', ORG_SLUG)

@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   org_slug: ORG_SLUG,
   team_name: 'श्री कृष्ण क्रीडा मंडळ गोंदवले खुर्द',
   tagline: 'Pride of the Village',
-  logo_url: '/logo.jpg',
+  logo_url: '/logo.png',
   primary_color: '#f97316',
   secondary_color: '#f43f5e',
   contact_email: null,

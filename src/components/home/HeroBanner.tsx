@@ -14,7 +14,7 @@ export function HeroBanner() {
       <img
         src={heroImage}
         alt={settings.team_name ?? 'Kabaddi team in action'}
-        className="absolute inset-0 -z-20 h-full w-full object-cover object-[70%_center]"
+        className="absolute inset-0 -z-20 h-full w-full object-cover object-[30%_30%]"
       />
 
       {/* Dark scrim: heavy on the left where the text sits, fading out so the photo stays crisp on the right. */}
@@ -34,7 +34,7 @@ export function HeroBanner() {
         }}
       />
 
-      <Container className="relative flex h-full flex-col justify-between px-6 animate-fadeIn sm:block">
+      <Container className="relative flex h-full flex-col justify-between px-6 animate-fadeIn">
         <div className="flex max-w-[75%] flex-col items-start text-left sm:max-w-md lg:max-w-2xl">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-2 text-xs font-bold uppercase tracking-widest text-[var(--color-primary)] shadow-sm backdrop-blur-md sm:mb-6">
             <Trophy size={14} className="text-[var(--color-secondary)]" /> {settings.tagline ?? 'Pride of the Village'}
@@ -50,15 +50,14 @@ export function HeroBanner() {
 
         <div className="mt-6 flex flex-col items-start gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-4">
           <Link to="/players">
-            <Button size="lg" className="rounded-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] px-6 py-5 text-sm font-bold text-white hover:opacity-90 hover:-translate-y-0.5 shadow-xl shadow-black/30 transition-all flex items-center gap-2 sm:px-8 sm:py-6">
-              Meet the Team <ArrowRight size={18} />
+            <Button className="rounded-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] px-4 py-2.5 text-xs font-bold text-white hover:opacity-90 hover:-translate-y-0.5 shadow-xl shadow-black/30 transition-all flex items-center gap-2 sm:px-5 sm:py-3 sm:text-sm">
+              Meet the Team <ArrowRight size={14} />
             </Button>
           </Link>
           <Link to="/achievements">
             <Button
-              size="lg"
               variant="outline"
-              className="rounded-full border border-white/40 bg-white/10 px-6 py-5 text-sm font-bold text-white backdrop-blur-md hover:bg-white/20 hover:-translate-y-0.5 shadow-sm transition-all sm:px-8 sm:py-6"
+              className="rounded-full border border-white/40 bg-white/10 px-4 py-2.5 text-xs font-bold text-white backdrop-blur-md hover:bg-white/20 hover:-translate-y-0.5 shadow-sm transition-all sm:px-5 sm:py-3 sm:text-sm"
             >
               Our Achievements
             </Button>

@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { IndianRupee, FileText, Plus, Pencil, Trash2, Upload, AlertCircle } from 'lucide-react'
 import { useExpenses, useCreateExpense, useUpdateExpense, useDeleteExpense } from '../../hooks/useExpenses'
 import type { Expense } from '../../types'
@@ -9,27 +8,7 @@ import { formatDateIN, formatINR, uploadImage } from '../../lib/utils'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Spinner } from '../../components/ui/Spinner'
-
-const EXPENSE_CATEGORIES = [
-  'Equipment',
-  'Travel',
-  'Tournament Fee',
-  'Uniform',
-  'Food',
-  'Other',
-] as const
-
-const expenseSchema = z.object({
-  year: z.coerce.number().int().min(2000).max(2100),
-  category: z.enum(EXPENSE_CATEGORIES),
-  description: z.string().min(1, 'Description is required'),
-  amount: z.coerce
-    .number({ invalid_type_error: 'Amount is required' })
-    .positive('Amount must be greater than 0'),
-  expense_date: z.string().min(1, 'Date is required'),
-})
-
-type ExpenseForm = z.infer<typeof expenseSchema>
+import { EXPENSE_CATEGORIES, expenseSchema, type ExpenseForm } from './expenseSchema'
 
 const currentYear = new Date().getFullYear()
 const YEAR_OPTIONS = Array.from({ length: currentYear - 2020 + 2 }, (_, i) => 2020 + i)

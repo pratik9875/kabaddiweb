@@ -23,34 +23,30 @@ function createImage(url: string): Promise<HTMLImageElement> {
   })
 }
 
-function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const image = await createImage(imageSrc)
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      if (!ctx) { reject(new Error('No canvas context')); return }
+async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
+  const image = await createImage(imageSrc)
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('No canvas context')
 
-      canvas.width = pixelCrop.width
-      canvas.height = pixelCrop.height
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
 
-      ctx.drawImage(
-        image,
-        pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height,
-        0, 0, pixelCrop.width, pixelCrop.height,
-      )
+  ctx.drawImage(
+    image,
+    pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height,
+    0, 0, pixelCrop.width, pixelCrop.height,
+  )
 
-      canvas.toBlob(
-        (blob) => {
-          if (blob) resolve(blob)
-          else reject(new Error('Canvas to blob failed'))
-        },
-        'image/jpeg',
-        0.9,
-      )
-    } catch (e) {
-      reject(e)
-    }
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob)
+        else reject(new Error('Canvas to blob failed'))
+      },
+      'image/jpeg',
+      0.9,
+    )
   })
 }
 

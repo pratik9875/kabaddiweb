@@ -41,7 +41,7 @@ export function PlayersPage() {
   return (
     <section className="px-6 py-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-8">
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Our Players</h1>
           <p className="mt-1 text-sm text-gray-500">Meet the squad of {settings.team_name}</p>

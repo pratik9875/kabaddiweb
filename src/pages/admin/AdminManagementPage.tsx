@@ -163,46 +163,38 @@ function ManagementFormModal({ open, editingMember, onClose }: ManagementFormMod
             {...register('role')}
           />
 
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Input
-                label="Phone"
-                type="tel"
-                placeholder="+91 98765 43210"
-                error={errors.phone?.message}
-                {...register('phone')}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                label="Email"
-                type="email"
-                placeholder="coach@example.com"
-                error={errors.email?.message}
-                {...register('email')}
-              />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Phone"
+              type="tel"
+              placeholder="+91 98765 43210"
+              error={errors.phone?.message}
+              {...register('phone')}
+            />
+            <Input
+              label="Email"
+              type="email"
+              placeholder="coach@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
           </div>
 
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Input
-                label="Joined Year"
-                type="number"
-                placeholder="2024"
-                error={errors.joined_year?.message}
-                {...register('joined_year')}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                label="Sort Order"
-                type="number"
-                placeholder="0"
-                error={errors.sort_order?.message}
-                {...register('sort_order')}
-              />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Joined Year"
+              type="number"
+              placeholder="2024"
+              error={errors.joined_year?.message}
+              {...register('joined_year')}
+            />
+            <Input
+              label="Sort Order"
+              type="number"
+              placeholder="0"
+              error={errors.sort_order?.message}
+              {...register('sort_order')}
+            />
           </div>
 
           <div>
@@ -334,7 +326,7 @@ export function AdminManagementPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Management</h1>
           <p className="text-sm text-gray-500">Coaching staff and management team</p>
